@@ -5,6 +5,7 @@
 # Gradle files
 .gradle
 /build/
+/bin/
 
 # Eclipse files
 .classpath
