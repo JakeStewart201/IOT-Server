@@ -33,6 +33,22 @@ buildscript {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        java {
+            srcDirs 'src/test/java'
+        }
+    }
+}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
 
