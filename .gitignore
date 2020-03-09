@@ -11,3 +11,9 @@
 .classpath
 .project
 .settings/
+
+# IntelliJ Meta #
+*.iml
+*.iws
+*.ipr
+.idea/
