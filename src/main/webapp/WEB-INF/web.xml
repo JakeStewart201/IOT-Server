@@ -23,4 +23,22 @@
 		<url-pattern>/index.html</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>recommendations</servlet-name>
+		<servlet-class>com.test.Recommendations</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>recommendations</servlet-name>
+		<url-pattern>/recommendations</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>data</servlet-name>
+		<servlet-class>com.test.Data</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>data</servlet-name>
+	<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+
 </web-app>
