@@ -68,6 +68,7 @@ dependencies {
 
     providedCompile 'javax.servlet:javax.servlet-api:4.0.0'
     compile 'javax.servlet:jstl:1.2'
+    compile 'mysql:mysql-connector-java:8.0.11'
 
     testCompile 'junit:junit:4.13'
 }
@@ -80,8 +81,9 @@ tomcat {
 }
 
 flyway {
-    url = 'jdbc:h2:file:./target/foobar'
-    user = 'sa'
+    url = 'jdbc:mysql://localhost:3306/test?useSSL=false'
+    user = 'test'
+    password = 'test'
     locations = ['filesystem:src/main/resources/db/migration']
 
 }
