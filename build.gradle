@@ -7,6 +7,24 @@
  */
 
 // Apply the java plugin to add support for Java
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.5'
+        classpath 'com.h2database:h2:1.4.197'
+    }
+}
+
+plugins {
+    id 'org.flywaydb.flyway' version '6.3.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'com.bmuschko.tomcat'
 apply plugin: 'eclipse-wtp'
@@ -18,18 +36,6 @@ allprojects {
         maven {
             url "https://repo1.maven.org/maven2/"
         }
-    }
-}
-
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "https://repo1.maven.org/maven2/"
-        }
-    }
-    dependencies {
-        classpath 'com.bmuschko:gradle-tomcat-plugin:2.5'
     }
 }
 
@@ -71,4 +77,11 @@ tomcat {
     httpsPort = 8443
     enableSSL = true
     contextPath = '/'
+}
+
+flyway {
+    url = 'jdbc:h2:file:./target/foobar'
+    user = 'sa'
+    locations = ['filesystem:src/main/resources/db/migration']
+
 }
