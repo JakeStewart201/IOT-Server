@@ -22,10 +22,21 @@ public class Data extends HttpServlet {
 
         String type = request.getParameter("type");
         System.out.println("Parameter [type] value = " + type);
+
+        String fromDate = request.getParameter("fromDate");
+        System.out.println("Parameter [type] value = " + fromDate);
+
         if (type !=  null){
 
+            if (!fromDate.equals("")){
+                dateConstraint = LocalDate.parse(fromDate);
+            }
 
+            System.out.println("Date constraint: " + dateConstraint);
 
+            //getDBdata(type, dateConstraint);
+
+            //send data for graph to jsp
             request.getSession().setAttribute("dates", Arrays.toString(listofDates()));
             request.getSession().setAttribute("measurements", Arrays.toString(listofMeasuremnts()));
             request.getSession().setAttribute("label", type);
@@ -36,22 +47,23 @@ public class Data extends HttpServlet {
 
 
     private List<GraphData> data = new ArrayList<GraphData>();
-    private String selected;
+    private LocalDate dateConstraint;
 
     public Data() {
         initTempData();
+        dateConstraint = LocalDate.MIN;
     }
 
     private void initTempData(){
 
         int year = 2020;
         data.add(new GraphData(23, LocalDate.of(year, 01, 10)));
-        data.add(new GraphData(5.6, LocalDate.of(year, 01, 20)));
+        data.add(new GraphData(-5.6, LocalDate.of(year, 01, 20)));
         data.add(new GraphData(17.5,LocalDate.of(year, 02, 15)));
         data.add(new GraphData(10, LocalDate.of(year, 03, 7)));
     }
 
-    private ArrayList<GraphData> getDBdata(String measurementType, LocalDateTime timeConstraint){
+    private ArrayList<GraphData> getDBdata(String measurementType, LocalDate timeConstraint){
         ArrayList<GraphData> data = new ArrayList<GraphData>();
 
         String sqlStatement = "SELECT value FROM " + measurementType;
