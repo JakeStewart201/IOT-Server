@@ -15,11 +15,27 @@ public class Recommendations extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        request.getSession().setAttribute("recommendations", recommendations);
+        String title = "Recommendations";
 
-        request.getRequestDispatcher("/recommend.jsp").forward(request, response);
+        try {
+            out.println("<!DOCTYPE html>");  // HTML 5
+            out.println("<html><head>");
+            out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+            out.println("<title>" + title + "</title></head>");
+            out.println("<body>");
+            out.println("<h1>" + title + "</h1>");
+            // Set a hyperlink image to refresh this page
+            int i = 1;
+            for(String r : recommendations)
+            {
+                out.println("Tip " + i + ": "+ r + "<p/>");
+                i+=1;
+            }
+            out.println("</body></html>");
+        } finally {
+            out.close();  // Always close the output writer
+        }
 
-        out.close();
 
     }
 

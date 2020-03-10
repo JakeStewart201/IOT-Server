@@ -7,18 +7,9 @@
 </head>
 <body>
 
-<h1> Students Information </h1>
+<h1> Recommendations</h1>
+<form action="data" method="get">
 <% List<String> recommendations = (ArrayList<String>)request.getAttribute("students");
-
-    int i = 1;
-    for(String r : recommendations)
-    {
-        out.print("Tip " + i + ": "+ r);
-
-        out.print("<br/>");
-        out.print("<br/>");
-        i+=1;
-    }
 
 %>
 
