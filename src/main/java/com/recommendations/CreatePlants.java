@@ -1,3 +1,5 @@
+package com.recommendations;
+
 import java.util.*;
 
 public class CreatePlants {
