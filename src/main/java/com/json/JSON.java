@@ -3,11 +3,13 @@ package com.json;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -71,10 +73,32 @@ public class JSON extends HttpServlet {
 					}
 				}
 				
+				int deviceID, humID, tempID, soilID, lightID;
+				
 				//TODO insert result into database
 				
 				//TODO form response JSON
+				
+				JSONObject response = new JSONObject();
+				response.put("device-id", deviceID);
+				
+				Map sensorIDs = new LinkedHashMap<Object, Object>(4);
+				sensorIDs.put("H", humID);
+				sensorIDs.put("T", tempID);
+				sensorIDs.put("S", soilID);
+				sensorIDs.put("L", lightID);
+				
+				response.put("sensor-dict", sensorIDs);
 				//{"device-id": 12, "sensor-dict": {"H": 9, "T": 10, "S": 11, "L": 12}}
+				resp.setContentType("text/json");
+				resp.setCharacterEncoding("UTF-8");
+				
+				PrintWriter writer = resp.getWriter();
+				
+				writer.write(response.toJSONString());
+				
+				writer.close();
+				
 			} else {
 				int deviceId = (int)jo.get("device-id");
 				DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
