@@ -1,3 +1,4 @@
+package com.recommendations;
 
 public class Plant {
 
