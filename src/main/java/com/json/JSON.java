@@ -120,19 +120,18 @@ public class JSON extends HttpServlet {
 					}
 				}
 
-				Device device = createDevice(lat, lat, hasLight, hasLight, hasLight, hasLight);
+				Device device = createDevice(lon, lat, hasHum, hasTemp, hasSoil, hasLight);
 
 				JSONObject response = new JSONObject();
 				response.put("device-id", device.getDeviceID());
 
-				Map sensorIDs = new LinkedHashMap<Object, Object>(4);
+				Map<Object, Object> sensorIDs = new LinkedHashMap<Object, Object>(4);
 				sensorIDs.put("H", device.getHumID());
 				sensorIDs.put("T", device.getTempID());
 				sensorIDs.put("S", device.getSoilID());
 				sensorIDs.put("L", device.getLightID());
 
 				response.put("sensor-dict", sensorIDs);
-				// {"device-id": 12, "sensor-dict": {"H": 9, "T": 10, "S": 11, "L": 12}}
 				resp.setContentType("text/json");
 				resp.setCharacterEncoding("UTF-8");
 
@@ -146,6 +145,7 @@ public class JSON extends HttpServlet {
 				int deviceId = (int) jo.get("device-id");
 				DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 				Date time = formatter.parse((String) jo.get("timestamp"));
+				JSONObject sensors = (JSONObject)jo.get("sensor-values");
 			}
 
 		} catch (ParseException | java.text.ParseException | ClassNotFoundException | SQLException e) {
