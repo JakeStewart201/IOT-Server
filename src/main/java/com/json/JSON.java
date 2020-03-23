@@ -29,12 +29,15 @@ public class JSON extends HttpServlet {
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+	private static final String myDriver = "org.gjt.mm.mysql.Driver";
+	private static final String myUrl = "jdbc:mysql://localhost/test";
+	private static final String usernameDB = "test";
+	private static final String passwordDB = "test";
+
 	private Device createDevice(double lon, double lat, boolean hasH, boolean hasT, boolean hasS, boolean hasL) throws ClassNotFoundException, SQLException {
 		// create a mysql database connection
-		String myDriver = "org.gjt.mm.mysql.Driver";
-		String myUrl = "jdbc:mysql://localhost/test";
 		Class.forName(myDriver);
-		Connection conn = DriverManager.getConnection(myUrl, "test", "test");
+		Connection conn = DriverManager.getConnection(myUrl, usernameDB, passwordDB);
 
 		PreparedStatement stmt = conn.prepareStatement("insert into Devices(lon, lat) values(?, ?)", Statement.RETURN_GENERATED_KEYS);
 		stmt.setDouble(1, lon);
@@ -64,6 +67,71 @@ public class JSON extends HttpServlet {
 		
 		return result;
 		
+	}
+	
+	private void addReading(int sensorID, int value, Date time) throws ClassNotFoundException, SQLException {
+		Class.forName(myDriver);
+		Connection conn = DriverManager.getConnection(myUrl, usernameDB, passwordDB);
+		
+		String type = getType(conn, sensorID);
+		
+		switch (type) {
+		case "L":
+			addLightReading(conn, time, sensorID, value);
+			break;
+		case "H":
+			addHumidityReading(conn, time, sensorID, value);
+			break;
+		case "M":
+			addSoilMoistureReading(conn, time, sensorID, value);
+			break;
+		case "T":
+			addTemperatureReading(conn, time, sensorID, value);
+			break;
+		}
+		
+		conn.close();
+	}
+	
+	private String getType(Connection conn, int sensorID) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("select type from Sensors where sensorID = ?");
+		
+		stmt.setInt(1, sensorID);
+		stmt.execute();
+		
+		return stmt.getResultSet().getString(1);
+	}
+	
+	private void addLightReading(Connection conn, Date time, int sensorID, int value) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("insert into Light(dateTime, sensorID, value) values(?, ?, ?)");
+		stmt.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
+		stmt.setInt(2, sensorID);
+		stmt.setInt(3, value);
+		stmt.execute();
+	}
+	
+	private void addHumidityReading(Connection conn, Date time, int sensorID, int value) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("insert into Humidity(dateTime, sensorID, value) values(?, ?, ?)");
+		stmt.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
+		stmt.setInt(2, sensorID);
+		stmt.setInt(3, value);
+		stmt.execute();
+	}
+	
+	private void addSoilMoistureReading(Connection conn, Date time, int sensorID, int value) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("insert into SoilMoisture(dateTime, sensorID, value) values(?, ?, ?)");
+		stmt.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
+		stmt.setInt(2, sensorID);
+		stmt.setInt(3, value);
+		stmt.execute();
+	}
+	
+	private void addTemperatureReading(Connection conn, Date time, int sensorID, int value) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("insert into Temperature(dateTime, sensorID, value) values(?, ?, ?)");
+		stmt.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
+		stmt.setInt(2, sensorID);
+		stmt.setInt(3, value);
+		stmt.execute();
 	}
 	
 	private int createSensor(Connection conn, int deviceID, String type) throws SQLException {
@@ -146,6 +214,13 @@ public class JSON extends HttpServlet {
 				DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 				Date time = formatter.parse((String) jo.get("timestamp"));
 				JSONObject sensors = (JSONObject)jo.get("sensor-values");
+				sensors.forEach((Object k, Object v) -> {
+					try {
+						addReading((int)k, (int)v, time);
+					} catch (ClassNotFoundException | SQLException e) {
+						e.printStackTrace();
+					}
+				});
 			}
 
 		} catch (ParseException | java.text.ParseException | ClassNotFoundException | SQLException e) {
