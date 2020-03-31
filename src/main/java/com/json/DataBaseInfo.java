@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class DataBaseInfo {
 
-	private static final String myDriver = "org.gjt.mm.mysql.Driver";
-	private static final String myUrl = "jdbc:mysql://localhost/test";
+	private static final String myDriver = "com.mysql.cj.jdbc.Driver";
+	private static final String myUrl = "jdbc:mysql://localhost/test?autoReconnect=true&useSSL=false";
 	private static final String usernameDB = "test";
 	private static final String passwordDB = "test";
 

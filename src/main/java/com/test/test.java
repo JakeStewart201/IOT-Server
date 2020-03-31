@@ -6,9 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
  
 public class test extends HttpServlet {
-   /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 368261114784206578L;
 
 @Override
