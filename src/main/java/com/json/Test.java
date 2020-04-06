@@ -16,7 +16,7 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		File file = new File("src/main/resources/JSON/setup.txt");
+		File file = new File("src/main/resources/JSON/reading.txt");
 		try {
 			JSONParser parser = new JSONParser();
 			// Use JSONObject for simple JSON and JSONArray for array of JSON.
@@ -24,7 +24,7 @@ public class Test {
 																								// file.
 			System.out.println(data.toJSONString());
 
-			URL url2 = new URL("http://localhost:8080/setup.html");
+			URL url2 = new URL("http://localhost:8080/reading.html");
 			HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json");
