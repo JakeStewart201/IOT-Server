@@ -45,7 +45,7 @@
 
 	<servlet>
 		<servlet-name>recommendations</servlet-name>
-		<servlet-class>com.test.Recommendations</servlet-class>
+		<servlet-class>com.data.Recommendations</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>recommendations</servlet-name>
@@ -54,7 +54,7 @@
 
 	<servlet>
 		<servlet-name>data</servlet-name>
-		<servlet-class>com.test.Data</servlet-class>
+		<servlet-class>com.data.Data</servlet-class>
 	</servlet>
 	<servlet-mapping>
 	<servlet-name>data</servlet-name>

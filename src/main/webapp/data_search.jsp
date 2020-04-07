@@ -44,12 +44,11 @@
 
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
-        type: 'line',
+    	type: 'line',
         data: {
-            labels: ${dates} ,
             datasets: [{
                 label: '${label}',
-                data: ${measurements},
+                data: ${data},
                 backgroundColor: 'rgba(0, 230, 64, 1)',
                 borderColor: 'rgba(0, 230, 64, 1)',
                 fill : false,
@@ -62,7 +61,9 @@
                     scaleLabel: {
                         display: true,
                         labelString: 'Date'
-                    }
+                    },
+                    type: 'time',
+                    distribution: 'linear'
                 }],
                 yAxes: [{
                     display: true,
