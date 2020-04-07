@@ -1,6 +1,6 @@
 CREATE TABLE Sensors (
-	sensorID INT NOT NULL,
+	sensorID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	deviceID INT NOT NULL,
-	PRIMARY KEY (sensorID),
+	type CHAR(1) NOT NULL,
 	FOREIGN KEY (deviceID) REFERENCES Device(deviceID)
 );
