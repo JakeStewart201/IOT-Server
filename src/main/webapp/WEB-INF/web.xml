@@ -14,6 +14,26 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>readings</servlet-name>
+		<servlet-class>com.json.Reading</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>readings</servlet-name>
+		<url-pattern>/reading.html</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>setup</servlet-name>
+		<servlet-class>com.json.Setup</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>setup</servlet-name>
+		<url-pattern>/setup.html</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>test</servlet-name>
 		<servlet-class>com.test.test</servlet-class>
 	</servlet>
