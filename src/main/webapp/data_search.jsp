@@ -23,6 +23,7 @@
             <option value="Soil Moisture">Soil Moisture</option>
         </select>
         <p/>
+        <label for="id">Choose a sensor id:</label><input type="number" id="id" name="id" min="0" max="100">
         <input type="submit" value="View">
     </form>
 

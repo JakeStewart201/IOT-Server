@@ -34,18 +34,32 @@ public class Data extends HttpServlet {
 		System.out.println("Parameter [type] value = " + type);
 
 		String fromDate = request.getParameter("fromDate");
-		System.out.println("Parameter [type] value = " + fromDate);
+		System.out.println("Parameter [fromDate] value = " + fromDate);
+
+		
+		int id = 0;
+		try {
+			id = Integer.parseInt(request.getParameter("id"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("Parameter [id] value = " + id);
 
 		if (type != null) {
-
-			List<GraphData> data = new ArrayList<GraphData>();
 			LocalDate dateConstraint;
 
-			initTempData(data);
 			dateConstraint = LocalDate.MIN;
 
 			if (!fromDate.equals("")) {
 				dateConstraint = LocalDate.parse(fromDate);
+			}
+
+			List<GraphData> data = new ArrayList<>();
+			try {
+				data = getDBdata(type, Timestamp.valueOf(dateConstraint.atStartOfDay()), id);
+			} catch (ClassNotFoundException | SQLException e) {
+				initTempData(data);
+				e.printStackTrace();
 			}
 
 			System.out.println("Date constraint: " + dateConstraint);
@@ -69,7 +83,7 @@ public class Data extends HttpServlet {
 		data.add(new GraphData(10, LocalDateTime.of(year, 03, 7, 23, 0)));
 	}
 
-	private ArrayList<GraphData> getDBdata(String measurementType, Timestamp timeConstraint)
+	private ArrayList<GraphData> getDBdata(String measurementType, Timestamp timeConstraint, int id)
 			throws ClassNotFoundException, SQLException {
 		ArrayList<GraphData> data = new ArrayList<GraphData>();
 
@@ -77,16 +91,16 @@ public class Data extends HttpServlet {
 
 		switch (measurementType) {
 		case "Temperature":
-			getTemperatureData(timeConstraint, data, conn);
+			getTemperatureData(timeConstraint, data, conn, id);
 			break;
 		case "Light":
-			getLightData(timeConstraint, data, conn);
+			getLightData(timeConstraint, data, conn, id);
 			break;
 		case "Humidity":
-			getHumidityData(timeConstraint, data, conn);
+			getHumidityData(timeConstraint, data, conn, id);
 			break;
 		case "Soil Moisture":
-			getSoilMoistureData(timeConstraint, data, conn);
+			getSoilMoistureData(timeConstraint, data, conn, id);
 			break;
 		default:
 			initTempData(data);
@@ -96,10 +110,11 @@ public class Data extends HttpServlet {
 		return data;
 	}
 
-	private void getLightData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn)
+	private void getLightData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT dataTime, sensorID FROM Light WHERE dateTime > ?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Light WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
+		stmt.setInt(2, id);
 
 		if (stmt.execute()) {
 
@@ -111,10 +126,11 @@ public class Data extends HttpServlet {
 		}
 	}
 
-	private void getHumidityData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn)
+	private void getHumidityData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT dataTime, sensorID FROM Humidity WHERE dateTime > ?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Humidity WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
+		stmt.setInt(2, id);
 
 		if (stmt.execute()) {
 
@@ -126,12 +142,13 @@ public class Data extends HttpServlet {
 		}
 	}
 
-	private void getSoilMoistureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn)
+	private void getSoilMoistureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
 			throws SQLException {
 		PreparedStatement stmt = conn
-				.prepareStatement("SELECT dataTime, sensorID FROM SoilMoisture WHERE dateTime > ?");
+				.prepareStatement("SELECT value, dateTime FROM SoilMoisture WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
-
+		stmt.setInt(2, id);
+		
 		if (stmt.execute()) {
 
 			ResultSet rs = stmt.getResultSet();
@@ -142,10 +159,11 @@ public class Data extends HttpServlet {
 		}
 	}
 
-	private void getTemperatureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn)
+	private void getTemperatureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT dataTime, sensorID FROM Temperature WHERE dateTime > ?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Temperature WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
+		stmt.setInt(2, id);
 
 		if (stmt.execute()) {
 
