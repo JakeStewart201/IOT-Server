@@ -4,7 +4,6 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -46,6 +45,8 @@ public class AddPlant extends HttpServlet {
 				conn.close();
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
+			} finally {
+				
 			}
 			
 		}
