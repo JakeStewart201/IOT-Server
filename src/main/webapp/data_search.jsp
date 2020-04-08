@@ -4,12 +4,24 @@
 
 <head>
     <title>View Data</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 
 <body>
+
+<div id="nav-placeholder">
+</div>
+
+<script>
+$(function(){
+    $("#nav-placeholder").load("nav.html");
+});
+</script>
+
 <div>
     <h1>My Data</h1>
     View a graph of your measurements.<p/>
+
 
     <form action="data" method="get">
         <label for="datePicker">Choose date to show measurements from:</label>

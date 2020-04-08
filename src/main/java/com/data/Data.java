@@ -41,7 +41,7 @@ public class Data extends HttpServlet {
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			id = 0;
 		}
 		System.out.println("Parameter [id] value = " + id);
 
