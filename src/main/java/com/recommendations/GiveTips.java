@@ -108,7 +108,7 @@ public class GiveTips {
 
 		for (int i = 0; i < plantsList.size(); i++) {
 
-			if (plantsList.get(i).getName().equals(name)) {
+			if (plantsList.get(i).getName().equalsIgnoreCase(name)) {
 
 				return plantsList.get(i);
 			}
