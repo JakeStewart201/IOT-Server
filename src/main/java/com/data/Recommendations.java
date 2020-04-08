@@ -10,7 +10,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.json.DataBaseInfo;
+import com.recommendations.BestFitResult;
 import com.recommendations.GiveTips;
+import com.recommendations.RecommendPlant;
 
 public class Recommendations extends HttpServlet {
 
@@ -87,6 +89,12 @@ public class Recommendations extends HttpServlet {
 			System.err.println("Got tips");
 			if (tips.size() == 0) {
 				tips.add("Everything looks great");
+			}
+			
+			BestFitResult plant = RecommendPlant.SearchForBestPlant(mTemp, mHum, mSoil, mLight);
+			
+			if (plant.getFound()) {
+				tips.add("You could also try growing a " + plant.getMessage() + " plant");
 			}
 
 			// send data for graph to jsp
