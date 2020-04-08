@@ -25,10 +25,10 @@ public class Reading extends HttpServlet {
 	private static final long serialVersionUID = -2348683777669285986L;
 	private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-	private void addReading(int sensorID, int value, Date time) throws ClassNotFoundException, SQLException {
+	private void addReading(int sensorID, int value, Date time, int deviceID) throws ClassNotFoundException, SQLException {
 		Connection conn = DataBaseInfo.getConnection();
 
-		String type = getType(conn, sensorID);
+		String type = getType(conn, sensorID, deviceID);
 
 		switch (type) {
 		case "L":
@@ -48,10 +48,11 @@ public class Reading extends HttpServlet {
 		conn.close();
 	}
 
-	private String getType(Connection conn, int sensorID) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("select type from Sensors where sensorID = ?");
+	private String getType(Connection conn, int sensorID, int deviceID) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("select type from Sensors where sensorID = ? AND deviceID = ?");
 
 		stmt.setInt(1, sensorID);
+		stmt.setInt(2, deviceID);
 		stmt.execute();
 
 		ResultSet results = stmt.getResultSet();
@@ -111,13 +112,13 @@ public class Reading extends HttpServlet {
 
 			JSONObject jo = (JSONObject) obj;
 
-			long deviceId = (long) jo.get("device-id");
+			int deviceID = Math.toIntExact((long) jo.get("device-id"));
 			DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 			Date time = formatter.parse((String) jo.get("timestamp"));
 			JSONObject sensors = (JSONObject) jo.get("sensor-values");
 			sensors.forEach((Object k, Object v) -> {
 				try {
-					addReading(Integer.parseInt((String)k), Math.toIntExact((long) v), time);
+					addReading(Integer.parseInt((String)k), Math.toIntExact((long) v), time, deviceID);
 				} catch (ClassNotFoundException | SQLException e) {
 					e.printStackTrace();
 				}

@@ -11,7 +11,7 @@ public class DataBaseInfo {
 	private static final String usernameDB = "test";
 	private static final String passwordDB = "test";
 
-	protected static Connection getConnection() throws ClassNotFoundException, SQLException {
+	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		Class.forName(DataBaseInfo.myDriver);
 		Connection conn = DriverManager.getConnection(DataBaseInfo.myUrl, DataBaseInfo.usernameDB, DataBaseInfo.passwordDB);
 
