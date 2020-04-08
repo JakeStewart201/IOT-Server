@@ -1,0 +1,38 @@
+#navigation li {
+  list-style: none;
+  display: block;
+  float: left;
+}
+
+#navigation li a {
+  display: block;
+  text-decoration: none;
+  color: #f0f0f0;
+  font-size: 1.6em;
+  margin 0 .5em;
+  float: left;
+  width: auto;
+  border: none;
+  padding: 10px 15px 9px 15px !important;
+  vertical-align: middle;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  background: #6b6b6b;
+}
+
+#navigation li a:hover {
+  background: #404040;
+}
+
+#navigation li a.active {
+  background: #27ff0f;
+  text: black;
+}
+
+.rectangle {
+  height: 62px;
+  position: relative;
+  margin: 3em 0;
+}
+
