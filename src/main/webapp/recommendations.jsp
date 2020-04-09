@@ -20,8 +20,7 @@ $(function(){
 });
 </script>
 
-<div>
-    <h1>Recommendations</h1>
+<div class="input-section">
     <form action="recommendations" method="get">
         <label for="deviceID">Enter device id:</label><input type="number" id="deviceID" name="deviceID" min="0" max="100">
         <input type="submit" value="View">
@@ -38,6 +37,7 @@ if (request.getParameter("deviceID") != null) {
 <script>
 
 var list = document.createElement('ul');
+list.classList.add('notification');
 var tips = ${tips};
 
 for (var i = 0; i < tips.length; i++) {

@@ -1,3 +1,7 @@
+#navigation {
+  padding-left: 0px;
+}
+
 #navigation li {
   list-style: none;
   display: block;
@@ -30,9 +34,30 @@
   text: black;
 }
 
-.rectangle {
-  height: 62px;
+.notification {
+  list-style: none;
+  padding: 0 0 0 0;
+}
+
+.notification li {
+  background: #c2c2c2;
   position: relative;
-  margin: 3em 0;
+  margin: 1em 3em;
+  padding: 1em 1.5em 1em 1.5em !important;
+  border-radius: 0.2em;
+  font-size: 1.2em;
+}
+
+.rectangle {
+  height: calc(1.9em + 20px);
+  position: relative;
+  margin: 3em 3em;
+  background: #6b6b6b;
+  box-shadow: 0 4px 2px -2px #27ff0f;
+}
+
+.input-section {
+  text-align: right;
+  margin: 3em 3em;
 }
 
