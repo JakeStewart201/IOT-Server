@@ -20,24 +20,19 @@ $(function(){
 });
 </script>
 
-<div>
-    <h1>My Data</h1>
-    View a graph of your measurements.<p/>
-
+<div class="center">
+<div class="bar">
 
     <form action="data" method="get">
-        <label for="datePicker">Choose date to show measurements from:</label>
+        <label for="datePicker">From:</label>
         <input type="date" id="datePicker" name="fromDate">
-        <p/>
-        Choose measurement:
         <select name="type">
-            <option value="Temperature">Temperature</option>
-            <option value="Light">Light</option>
-            <option value="Humidity">Humidity</option>
-            <option value="Soil Moisture">Soil Moisture</option>
+          <option value="Temperature">Temperature</option>
+          <option value="Light">Light</option>
+          <option value="Humidity">Humidity</option>
+          <option value="Soil Moisture">Soil Moisture</option>
         </select>
-        <p/>
-        <label for="id">Choose a sensor id:</label><input type="number" id="id" name="id" min="0" max="100">
+        <label for="id">Sensor ID:</label><input type="number" id="id" name="id" min="0" max="100">
         <input type="submit" value="View">
     </form>
 
@@ -51,7 +46,7 @@ $(function(){
 <script src="chart/Chart.bundle.js" type="text/javascript">
 </script>
 
-<div style="width:75%">
+<div class="center" style="width:75%">
     <canvas id="myChart"></canvas>
 </div>
 
@@ -101,7 +96,7 @@ else {%>
 <%
     }
 %>
-
+</div>
 
 </body>
 </html>

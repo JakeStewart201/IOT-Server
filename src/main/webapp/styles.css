@@ -1,3 +1,16 @@
+body {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.center {
+  margin: auto;
+  width: 90%;
+}
+
+.bar {
+  text-align: center;
+}
+
 #navigation {
   padding-left: 0px;
 }
@@ -51,7 +64,7 @@
 .rectangle {
   height: calc(1.9em + 20px);
   position: relative;
-  margin: 3em 3em;
+  margin: 2em 2em;
   background: #6b6b6b;
   box-shadow: 0 4px 2px -2px #27ff0f;
 }
