@@ -27,7 +27,7 @@ $(function(){
 
 var list = document.createElement('ul');
 list.classList.add('info-box');
-var statuss = [
+/*ar statuss = [
 [
   {'t': 'good', 'm': "All is good", 'i': 'water'},
   {'t': 'ok', 'm': "All is ok", 'i': 'temp'}
@@ -36,11 +36,14 @@ var statuss = [
   {'t': 'bad', 'm': "All is bad", 'i': 'light'},
   {'t': 'good', 'm': "All is good2", 'i': 'hum'}
 ]];
-var names = ["carrot", "tomato"];
-//var status = ${status};
-//var names = ${names};
+var names = ["carrot", "tomato"];*/
+var statuss = ${statuss};
+var names = ${names};
 
 for (var i = 0; i < names.length; i++) {
+	if (names[i] == null) {
+		continue;
+	}
     var item = document.createElement('li');
 	item.classList.add('plant-info');
 	

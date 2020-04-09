@@ -29,9 +29,7 @@ public class GiveTips {
 	}
 
 	private static void addCheckResult(CheckResult cr, List<String> s) {
-		if (!cr.getOk()) {
-			s.add(cr.getMessage());
-		}
+		s.add(cr.getMessage());
 	}
 
 	static CheckResults DoChecks(Plant plant, double mTemp, double mHum, double mSoil, double mLight) {
@@ -48,60 +46,60 @@ public class GiveTips {
 
 		if (mTemp < plant.getMinTemperature()) {
 
-			return new CheckResult(false, "Temperature is too low, plant needs heating");
+			return new CheckResult("bad", "Temperature is too low, plant needs heating", "temp");
 		}
 
 		if (mTemp > plant.getMaxTemperature()) {
 
-			return new CheckResult(false, "Temperature is too high, plant needs cooling");
+			return new CheckResult("bad", "Temperature is too high, plant needs cooling", "temp");
 		}
 
-		return new CheckResult(true, "Temperature is ideal");
+		return new CheckResult("good", "Temperature is ideal", "temp");
 	}
 
 	static CheckResult CheckHumidity(Plant plant, double mHum) {
 
 		if (mHum < plant.getMinHumidity()) {
 
-			return new CheckResult(false, "Humidity is too low, increase humidty");
+			return new CheckResult("bad", "Humidity is too low, increase humidty", "hum");
 		}
 
 		if (mHum > plant.getMaxHumidity()) {
 
-			return new CheckResult(false, "Humidity is too high, decrease humidity");
+			return new CheckResult("bad", "Humidity is too high, decrease humidity", "hum");
 		}
 
-		return new CheckResult(true, "Humidity is ideal");
+		return new CheckResult("good", "Humidity is ideal", "hum");
 	}
 
 	static CheckResult CheckSoilMoisture(Plant plant, double mSoil) {
 
 		if (mSoil < plant.getMinSoilMoisture()) {
 
-			return new CheckResult(false, "Soil moisture is too low, plant needs watering");
+			return new CheckResult("bad", "Soil moisture is too low, plant needs watering", "water");
 		}
 
 		if (mSoil > plant.getMaxSoilMoisture()) {
 
-			return new CheckResult(false, "Soil moisture is too high, do not water plant again yet");
+			return new CheckResult("bad", "Soil moisture is too high, do not water plant again yet", "water");
 		}
 
-		return new CheckResult(true, "Soil moisture is ideal");
+		return new CheckResult("good", "Soil moisture is ideal", "water");
 	}
 
 	static CheckResult CheckLightLevel(Plant plant, double mLight) {
 
 		if (mLight < plant.getMinLightLevel()) {
 
-			return new CheckResult(false, "Light level is too low, plant needs more light");
+			return new CheckResult("bad", "Light level is too low, plant needs more light", "light");
 		}
 
 		if (mLight > plant.getMaxLightLevel()) {
 
-			return new CheckResult(false, "Light level is too high, plants needs less light");
+			return new CheckResult("bad", "Light level is too high, plants needs less light", "light");
 		}
 
-		return new CheckResult(true, "Light level is ideal");
+		return new CheckResult("good", "Light level is ideal", "light");
 	}
 
 	static Plant FindPlantInList(String name) {

@@ -2,22 +2,24 @@ package com.recommendations;
 
 public class CheckResult {
 
-	private Boolean ok;
+	private String ok;
 	private String message;
+	private String type;
 	
-	public CheckResult (Boolean b, String s) {
+	public CheckResult (String b, String s, String type) {
 		
 		ok = b;
 		message = s;
+		this.type = type;
 	}
 	
-	public Boolean getOk () {
+	public String getOk () {
 		
 		return ok;
 	}
 	
 	public String getMessage () {
 		
-		return message;
+		return "{'t': '" + ok + "', 'm':'" + message + "', 'i':'" + type + "'}";
 	}
 }

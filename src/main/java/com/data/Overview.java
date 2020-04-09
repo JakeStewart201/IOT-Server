@@ -10,186 +10,161 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.json.DataBaseInfo;
-import com.recommendations.BestFitResult;
 import com.recommendations.GiveTips;
-import com.recommendations.RecommendPlant;
 
 public class Overview extends HttpServlet {
-
-	private static final long serialVersionUID = -3046677642715282124L;
+	
+	private static final long serialVersionUID = -8112750831178650005L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		int deviceID = 1;
+		String[] names = new String[3];
+		String[] statuss = new String[3];
+		Connection conn = null;
+		try {
+			conn = DataBaseInfo.getConnection();
+			PreparedStatement stmt = conn.prepareStatement("SELECT plantID, deviceID, name FROM UserPlants");
+			stmt.execute();
 
-		if (deviceID > 0) {
-
-			List<String> tips;
-
-			String name = "";
-			int mTemp = -1, mHum = -1, mSoil = -1, mLight = -1;
-			
-			Connection conn;
-			try {
-				conn = DataBaseInfo.getConnection();
-				
-				try {
-					name = getName(conn, deviceID);
-				} catch (SQLException e) {
-					e.printStackTrace();
+			ResultSet rs = stmt.getResultSet();
+			for (int i = 0; i < 3; i++) {
+				if (rs.next()) {
+					names[i] = rs.getString("name");
+					int deviceID = Math.toIntExact(rs.getLong("deviceID"));
+					statuss[i] = getPlantTips(conn, deviceID, names[i]);
+					names[i] = "'" + names[i].toLowerCase() + "'";
 				}
-				System.err.println("Plant name: " + name);
-
-				try {
-					mTemp = getTempReading(conn, deviceID);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				System.err.println("Temp reading: " + mTemp);
-
-				try {
-					mHum = getHumReading(conn, deviceID);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				System.err.println("Hum reading: " + mHum);
-
-				try {
-					mSoil = getSoilReading(conn, deviceID);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				System.err.println("Soil reading: " + mSoil);
-				
-				try {
-					mLight = getLightReading(conn, deviceID);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				System.err.println("Light reading: " + mLight);
-				
-				conn.close();
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
 			}
-
-			System.err.println("Getting tips");
-			tips = GiveTips.GET_TIPS(name, mTemp, mHum, mSoil, mLight);
-
-			System.err.println("Got tips");
-			if (tips.size() == 0) {
-				tips.add("Everything looks great");
-			}
-			
-			BestFitResult plant = RecommendPlant.SearchForBestPlant(mTemp, mHum, mSoil, mLight);
+			conn.close();
+		} catch (ClassNotFoundException | SQLException e1) {
+			e1.printStackTrace();
+		}
 
 			// send data for graph to jsp
-			request.getSession().setAttribute("tips", Arrays.toString(listOfStrings(tips)));
-
-		}
+			request.getSession().setAttribute("names", Arrays.toString(names));
+			request.getSession().setAttribute("statuss", Arrays.toString(statuss));
 
 		request.getRequestDispatcher("/overview.jsp").forward(request, response);
 
 	}
 
 	private int getHumReading(Connection conn, int deviceID) throws SQLException {
-		
+
 		PreparedStatement stmt = conn.prepareStatement("SELECT value FROM Humidity INNER JOIN Sensors "
-				+ "ON Humidity.sensorID = Sensors.sensorID "
-				+ "WHERE deviceID = ? AND "
+				+ "ON Humidity.sensorID = Sensors.sensorID " + "WHERE deviceID = ? AND "
 				+ "dateTime = (SELECT MAX(dateTime) FROM Humidity INNER JOIN Sensors ON Humidity.sensorID = Sensors.sensorID WHERE deviceID = ?)");
 		stmt.setInt(1, deviceID);
 		stmt.setInt(2, deviceID);
 		stmt.execute();
-		
+
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next()) {
 			return rs.getInt("value");
 		}
-		
-		return -1;
-		
-	}
 
-	private String getName(Connection conn, int deviceID) throws SQLException {
-		
-		PreparedStatement stmt = conn.prepareStatement("SELECT name FROM UserPlants WHERE deviceID = ?");
-		stmt.setInt(1, deviceID);
-		stmt.execute();
-		
-		ResultSet rs = stmt.getResultSet();
-		if (rs.next()) {
-			return rs.getString("name");
+		return -1;
+
+	}
+	
+	private String getPlantTips(Connection conn, int deviceID, String name) {
+		List<String> tips;
+
+		int mTemp = -1, mHum = -1, mSoil = -1, mLight = -1;
+
+		try {
+			mTemp = getTempReading(conn, deviceID);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-		return "";
-		
+		System.err.println("Temp reading: " + mTemp);
+
+		try {
+			mHum = getHumReading(conn, deviceID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Hum reading: " + mHum);
+
+		try {
+			mSoil = getSoilReading(conn, deviceID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Soil reading: " + mSoil);
+
+		try {
+			mLight = getLightReading(conn, deviceID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Light reading: " + mLight);
+
+		System.err.println("Getting tips");
+		tips = GiveTips.GET_TIPS(name, mTemp, mHum, mSoil, mLight);
+		return Arrays.toString(listOfStrings(tips));
 	}
 
 	private int getSoilReading(Connection conn, int deviceID) throws SQLException {
-		
+
 		PreparedStatement stmt = conn.prepareStatement("SELECT value FROM SoilMoisture INNER JOIN Sensors "
-				+ "ON SoilMoisture.sensorID = Sensors.sensorID "
-				+ "WHERE deviceID = ? AND "
+				+ "ON SoilMoisture.sensorID = Sensors.sensorID " + "WHERE deviceID = ? AND "
 				+ "dateTime = (SELECT MAX(dateTime) FROM SoilMoisture INNER JOIN Sensors ON SoilMoisture.sensorID = Sensors.sensorID WHERE deviceID = ?)");
 		stmt.setInt(1, deviceID);
 		stmt.setInt(2, deviceID);
 		stmt.execute();
-		
+
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next()) {
 			return rs.getInt("value");
 		}
-		
+
 		return -1;
-		
+
 	}
 
 	private int getTempReading(Connection conn, int deviceID) throws SQLException {
-		
+
 		PreparedStatement stmt = conn.prepareStatement("SELECT value FROM Temperature INNER JOIN Sensors "
-				+ "ON Temperature.sensorID = Sensors.sensorID "
-				+ "WHERE deviceID = ? AND "
+				+ "ON Temperature.sensorID = Sensors.sensorID " + "WHERE deviceID = ? AND "
 				+ "dateTime = (SELECT MAX(dateTime) FROM Temperature INNER JOIN Sensors ON Temperature.sensorID = Sensors.sensorID WHERE deviceID = ?)");
 		stmt.setInt(1, deviceID);
 		stmt.setInt(2, deviceID);
 		stmt.execute();
-		
+
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next()) {
 			return rs.getInt("value");
 		}
-		
+
 		return -1;
-		
+
 	}
 
 	private int getLightReading(Connection conn, int deviceID) throws SQLException {
-		
+
 		PreparedStatement stmt = conn.prepareStatement("SELECT value FROM Light INNER JOIN Sensors "
-				+ "ON Light.sensorID = Sensors.sensorID "
-				+ "WHERE deviceID = ? AND "
+				+ "ON Light.sensorID = Sensors.sensorID " + "WHERE deviceID = ? AND "
 				+ "dateTime = (SELECT MAX(dateTime) FROM Light INNER JOIN Sensors ON Light.sensorID = Sensors.sensorID WHERE deviceID = ?)");
 		stmt.setInt(1, deviceID);
 		stmt.setInt(2, deviceID);
 		stmt.execute();
-		
+
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next()) {
 			return rs.getInt("value");
 		}
-		
+
 		return -1;
-		
+
 	}
 
 	private String[] listOfStrings(List<String> tips) {
 		String[] s = new String[tips.size()];
 		int i = 0;
 		for (String tip : tips) {
-			s[i++] = "'" + tip + "'";
+			s[i++] = tip;
 		}
 		return s;
 	}
