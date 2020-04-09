@@ -29,6 +29,47 @@ $(function(){
 </div>
 <div id="tips">
 </div>
+<ul class = "info-box">
+
+<li class="plant-info">
+  <div class="image-box">
+  <img src="images/carrot.jpg" alt="carrot">
+  </div>
+  <div class="status-box">
+    <ul>
+      <li class="status good"><span class="statustext">Good</span></li>
+      <li class="status bad"><span class="statustext">Bad</span></li>
+      <li class="status ok"><span class="statustext">Ok alot of text to try and break the screen</span></li>
+    </ul>
+  </div>
+</li>
+
+<li class="plant-info">
+  <div class="image-box">
+  <img src="images/cactus.jpg" alt="cactus">
+  </div>
+  <div class="status-box">
+    <ul>
+      <li class="status good"><span class="statustext">Good</span></li>
+      <li class="status bad"><span class="statustext">Bad</span></li>
+      <li class="status ok"><span class="statustext">Ok</span></li>
+    </ul>
+  </div>
+</li>
+
+<li class="plant-info">
+  <div class="image-box">
+  <img src="images/tomato.jpg" alt="tomato">
+  </div>
+  <div class="status-box">
+    <ul>
+      <li class="status good"><span class="statustext">Good</span></li>
+      <li class="status bad"><span class="statustext">Bad</span></li>
+      <li class="status ok"><span class="statustext">Ok</span></li>
+    </ul>
+  </div>
+</li>
+</ul>
 
 <%
 if (request.getParameter("deviceID") != null) {

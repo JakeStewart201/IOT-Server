@@ -74,3 +74,88 @@ body {
   margin: 3em 3em;
 }
 
+.info-box {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  padding: 0;
+  overflow: visible;
+  margin: 0;
+}
+
+.plant-info {
+  background: #c2c2c2;
+  position: relative;
+  margin: 1em 1em;
+  padding: 1.5em 1.5em 1em 1.5em !important;
+  border-radius: 0.2em;
+  font-size: 1.2em;
+  list-style: none;
+  float: left;
+  overflow: visible;
+  text-decoration: none;
+  display: inline;
+}
+
+.image-box {
+  background: #ffffff;
+  height: 320px;
+  width: 240px;
+  overflow: hidden;
+  margin: 0px 0px 15px 0px;
+}
+
+.image-box img {
+  max-height: 100%;
+}
+
+.status-box {
+  padding: 0;
+  overflow: visible;
+}
+
+.status-box ul {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.status {
+  float: left;
+  text-decoration: none;
+  margin: 0;
+  overflow: visible;
+  padding: 17px 17px 17px 17px;
+}
+
+.status .statustext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  overflow: visible;
+  position: absolute;
+  z-index: 1;
+}
+
+.status:hover .statustext {
+  visibility: visible;
+}
+
+.good {
+  background: green;
+}
+
+.ok {
+  background: orange;
+}
+
+.bad {
+  background: red;
+}
