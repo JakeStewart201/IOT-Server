@@ -128,12 +128,22 @@ body {
   text-decoration: none;
   margin: 0;
   overflow: visible;
-  padding: 17px 17px 17px 17px;
+  padding: 5.5px 5.5px 5.5px 5.5px;
+  height: 29px;
+  width: 29px;
+  border-radius: 3px;
+}
+
+.status img {
+  margin: 0;
+  height: 29px;
+  width: 29px;
 }
 
 .status .statustext {
   visibility: hidden;
   width: 120px;
+  font-size: 19;
   background-color: black;
   color: #fff;
   text-align: center;
@@ -149,13 +159,13 @@ body {
 }
 
 .good {
-  background: green;
+  background: #27ff0f;
 }
 
 .ok {
-  background: orange;
+  background: #f3f700;
 }
 
 .bad {
-  background: red;
+  background: #f71000;
 }

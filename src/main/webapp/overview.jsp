@@ -29,12 +29,12 @@ var list = document.createElement('ul');
 list.classList.add('info-box');
 var statuss = [
 [
-  {'t': 'good', 'm': "All is good"},
-  {'t': 'ok', 'm': "All is ok"}
+  {'t': 'good', 'm': "All is good", 'i': 'water'},
+  {'t': 'ok', 'm': "All is ok", 'i': 'temp'}
 ],
 [
-  {'t': 'bad', 'm': "All is bad"},
-  {'t': 'good', 'm': "All is good2"}
+  {'t': 'bad', 'm': "All is bad", 'i': 'light'},
+  {'t': 'good', 'm': "All is good2", 'i': 'hum'}
 ]];
 var names = ["carrot", "tomato"];
 //var status = ${status};
@@ -61,6 +61,10 @@ for (var i = 0; i < names.length; i++) {
 		var span = document.createElement('span');
 		span.classList.add('statustext');
 		span.appendChild(document.createTextNode(statuss[i][j]['m']));
+		var statusimage = document.createElement('img');
+		statusimage.src = 'images/' + statuss[i][j]['i'] + '.png';
+		statusimage.alt = "";
+		statusLi.appendChild(statusimage);
 		statusLi.appendChild(span);
 		statusList.appendChild(statusLi);
 	}
