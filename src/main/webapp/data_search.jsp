@@ -4,7 +4,6 @@
 
 <head>
     <title>View Data</title>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
@@ -25,8 +24,8 @@ $(function(){
 
     <form action="data" method="get">
         <label for="datePicker">From:</label>
-        <input type="date" id="datePicker" name="fromDate">
-        <select name="type" onChange="changeData(this);">
+        <input type="date" id="datePicker" name="fromDate" onChange="updateDate(this);">
+        <select name="type" onChange="updateType(this);">
           <option value="Temperature" selected="selected">Temperature</option>
           <option value="Light">Light</option>
           <option value="Humidity">Humidity</option>
@@ -51,6 +50,7 @@ $(function(){
 <script>
 	var jLabel = "Temperature";
     var jData = ${data};
+	var epoch = 0;
 
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
@@ -105,10 +105,34 @@ function removeData(chart) {
     });
 }
 
-function changeData(sel) {
-	var type = sel.options[sel.selectedIndex].text;
+function updateType(sel) {
+	jLabel = sel.options[sel.selectedIndex].text;
+	changeData();
+}
+
+function updateDate(dat) {
+	var date = dat.value;
+	if (date.match(/\d{4}-\d{2}-\d{2}/)) {
+		var temp = new Date(date);
+		epoch = temp.getTime();
+		changeData();
+	}
+}
+
+function trimData(oldData, epoch) {
+	var newData = [];
+	oldData.forEach((reading) => {
+		if (reading.x >= epoch) {
+			newData.push(reading);
+		}
+	});
+	return newData;
+}
+
+function changeData() {
+	var data = trimData(jData[jLabel], epoch);
     removeData(myChart);
-	addData(myChart, type, jData[type]);
+	addData(myChart, jLabel, data);
 }
 </script>
 

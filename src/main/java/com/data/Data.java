@@ -30,9 +30,6 @@ public class Data extends HttpServlet {
 		// response.setContentType("text/html;charset=UTF-8");
 		// PrintWriter out = response.getWriter();
 
-		String fromDate = request.getParameter("fromDate");
-		System.out.println("Parameter [fromDate] value = " + fromDate);
-
 		int id = 0;
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
@@ -46,10 +43,6 @@ public class Data extends HttpServlet {
 
 			dateConstraint = LocalDate.MIN;
 
-			if (!fromDate.equals("")) {
-				dateConstraint = LocalDate.parse(fromDate);
-			}
-
 			String data = "";
 			try {
 				data = getDBdata(Timestamp.valueOf(dateConstraint.atStartOfDay()), id);
@@ -57,8 +50,6 @@ public class Data extends HttpServlet {
 				data = initTempData();
 				e.printStackTrace();
 			}
-
-			System.out.println("Date constraint: " + dateConstraint);
 
 			// getDBdata(type, dateConstraint);
 

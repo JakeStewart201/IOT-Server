@@ -48,7 +48,7 @@ for (var i = 0; i < names.length; i++) {
     var item = document.createElement('li');
 	item.classList.add('plant-info');
 	(function(i) {
-		item.addEventListener("click", function() {location.href = '/data?fromDate=&id=' + devices[i];}, false);
+		item.addEventListener("click", function() {location.href = '/data?id=' + devices[i];}, false);
 	})(i);
 	
 	var pictureDiv = document.createElement('div');
