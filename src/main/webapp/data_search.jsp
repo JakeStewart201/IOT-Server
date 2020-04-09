@@ -26,20 +26,18 @@ $(function(){
     <form action="data" method="get">
         <label for="datePicker">From:</label>
         <input type="date" id="datePicker" name="fromDate">
-        <select name="type">
-          <option value="Temperature">Temperature</option>
+        <select name="type" onChange="changeData(this);">
+          <option value="Temperature" selected="selected">Temperature</option>
           <option value="Light">Light</option>
           <option value="Humidity">Humidity</option>
           <option value="Soil Moisture">Soil Moisture</option>
         </select>
-        <label for="id">Sensor ID:</label><input type="number" id="id" name="id" min="0" max="100">
-        <input type="submit" value="View">
     </form>
 
 </div>
 
 <%
-        if (request.getParameter("type") != null) {
+        if (request.getParameter("id") != null) {
             // the following code uses the open source chart.js to produce a graph
 %>
 
@@ -51,14 +49,16 @@ $(function(){
 </div>
 
 <script>
+	var jLabel = "Temperature";
+    var jData = ${data};
 
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
     	type: 'line',
         data: {
             datasets: [{
-                label: '${label}',
-                data: ${data},
+                label: jLabel,
+                data: jData[jLabel],
                 backgroundColor: 'rgba(0, 230, 64, 1)',
                 borderColor: 'rgba(0, 230, 64, 1)',
                 fill : false,
@@ -87,7 +87,29 @@ $(function(){
                 }]
             }
         }
+		
     });
+	
+function addData(chart, label, data) {
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data = data;
+		dataset.label = label;
+    });
+    chart.update();
+}
+
+function removeData(chart) {
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data = [];
+		dataset.label = "";
+    });
+}
+
+function changeData(sel) {
+	var type = sel.options[sel.selectedIndex].text;
+    removeData(myChart);
+	addData(myChart, type, jData[type]);
+}
 </script>
 
 <%}

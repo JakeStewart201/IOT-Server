@@ -22,6 +22,7 @@ public class Overview extends HttpServlet {
 
 		String[] names = new String[3];
 		String[] statuss = new String[3];
+		String[] devices = new String[3];
 		Connection conn = null;
 		try {
 			conn = DataBaseInfo.getConnection();
@@ -35,6 +36,7 @@ public class Overview extends HttpServlet {
 					int deviceID = Math.toIntExact(rs.getLong("deviceID"));
 					statuss[i] = getPlantTips(conn, deviceID, names[i]);
 					names[i] = "'" + names[i].toLowerCase() + "'";
+					devices[i] = "'" + deviceID + "'";
 				}
 			}
 			conn.close();
@@ -45,6 +47,7 @@ public class Overview extends HttpServlet {
 			// send data for graph to jsp
 			request.getSession().setAttribute("names", Arrays.toString(names));
 			request.getSession().setAttribute("statuss", Arrays.toString(statuss));
+			request.getSession().setAttribute("devices", Arrays.toString(devices));
 
 		request.getRequestDispatcher("/overview.jsp").forward(request, response);
 

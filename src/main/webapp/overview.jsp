@@ -39,6 +39,7 @@ list.classList.add('info-box');
 var names = ["carrot", "tomato"];*/
 var statuss = ${statuss};
 var names = ${names};
+var devices = ${devices};
 
 for (var i = 0; i < names.length; i++) {
 	if (names[i] == null) {
@@ -46,6 +47,9 @@ for (var i = 0; i < names.length; i++) {
 	}
     var item = document.createElement('li');
 	item.classList.add('plant-info');
+	(function(i) {
+		item.addEventListener("click", function() {location.href = '/data?fromDate=&id=' + devices[i];}, false);
+	})(i);
 	
 	var pictureDiv = document.createElement('div');
 	pictureDiv.classList.add('image-box');

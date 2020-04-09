@@ -16,15 +16,23 @@ public class GiveTips {
 			return tips;
 		}
 
-		CheckResult tempCheck = CheckTemperature(plant, mTemp);
-		CheckResult humCheck = CheckHumidity(plant, mHum);
-		CheckResult soilCheck = CheckSoilMoisture(plant, mSoil);
-		CheckResult lightCheck = CheckLightLevel(plant, mLight);
+		if (mTemp != -1) {
+			CheckResult tempCheck = CheckTemperature(plant, mTemp);
+			addCheckResult(tempCheck, tips);
+		}
+		if (mHum != -1) {
+			CheckResult humCheck = CheckHumidity(plant, mHum);
+			addCheckResult(humCheck, tips);
+		}
+		if (mSoil != -1) {
+			CheckResult soilCheck = CheckSoilMoisture(plant, mSoil);
+			addCheckResult(soilCheck, tips);
+		}
+		if (mLight != -1) {
+			CheckResult lightCheck = CheckLightLevel(plant, mLight);
+			addCheckResult(lightCheck, tips);
+		}
 
-		addCheckResult(tempCheck, tips);
-		addCheckResult(humCheck, tips);
-		addCheckResult(soilCheck, tips);
-		addCheckResult(lightCheck, tips);
 		return tips;
 	}
 

@@ -97,6 +97,10 @@ body {
   display: inline;
 }
 
+.plant-info:hover {
+	cursor:pointer;
+}
+
 .image-box {
   background: #ffffff;
   height: 320px;
