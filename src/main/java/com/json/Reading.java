@@ -50,7 +50,8 @@ public class Reading extends HttpServlet {
 
 	private String getType(Connection conn, int sensorID, int deviceID) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("select type from Sensors where sensorID = ? AND deviceID = ?");
-
+		System.err.println(sensorID);
+		System.err.println(deviceID);
 		stmt.setInt(1, sensorID);
 		stmt.setInt(2, deviceID);
 		stmt.execute();

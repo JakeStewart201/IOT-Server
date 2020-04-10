@@ -35,7 +35,7 @@ public class Setup extends HttpServlet {
 		Connection conn =  DataBaseInfo.getConnection();
 
 		System.err.println("Inserting device");
-		PreparedStatement stmt = conn.prepareStatement("insert into Device(lon, lat) values(?, ?)",
+		PreparedStatement stmt = conn.prepareStatement("insert into Device(lon, lat) values(?, ?) returning deviceid",
 				Statement.RETURN_GENERATED_KEYS);
 		stmt.setDouble(1, lon);
 		stmt.setDouble(2, lat);
@@ -44,9 +44,9 @@ public class Setup extends HttpServlet {
 		ResultSet rs = stmt.getGeneratedKeys();
 		System.err.println("Got keys");
 		System.err.println(rs.getMetaData().getColumnName(1));
-		int deviceID = rs.next() ? rs.getInt("GENERATED_KEY") : -1;
+		int deviceID = rs.next() ? rs.getInt(1) : -1;
 		System.err.println("Got device id");
-
+		System.err.println(deviceID);
 		int humID = -1, tempID = -1, soilID = -1, lightID = -1;	
 
 		if (hasH) {
@@ -77,13 +77,13 @@ public class Setup extends HttpServlet {
 	}
 
 	private int createSensor(Connection conn, int deviceID, String type) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("insert into Sensors(deviceID, type) values(?, ?)",
+		PreparedStatement stmt = conn.prepareStatement("insert into Sensors(deviceID, type) values(?, ?) returning sensorid",
 				Statement.RETURN_GENERATED_KEYS);
 		stmt.setDouble(1, deviceID);
 		stmt.setString(2, type);
 		stmt.execute();
 		ResultSet rs = stmt.getGeneratedKeys();
-		int sensorID = rs.next() ? rs.getInt("GENERATED_KEY") : -1;
+		int sensorID = rs.next() ? rs.getInt(1) : -1;
 
 		return sensorID;
 	}
