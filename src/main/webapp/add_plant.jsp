@@ -26,9 +26,11 @@ $(function(){
         <label for="deviceID">Enter device id:</label><input type="number" id="deviceID" name="deviceID" min="0" max="100">
         </p>
         <select name="name">
-            <option value="Tomato">Tomato</option>
             <option value="Cactus">Cactus</option>
             <option value="Carrot">Carrot</option>
+            <option value="Marigold">Marigold</option>
+            <option value="Tomato">Tomato</option>
+            <option value="Venus Fly Trap">Venus Fly Trap</option>
         </select>
         <input type="submit" value="Create">
     </form>
