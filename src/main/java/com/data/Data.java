@@ -41,11 +41,9 @@ public class Data extends HttpServlet {
 		if (id != 0) {
 			LocalDate dateConstraint;
 
-			dateConstraint = LocalDate.MIN;
-
 			String data = "";
 			try {
-				data = getDBdata(Timestamp.valueOf(dateConstraint.atStartOfDay()), id);
+				data = getDBdata(id);
 			} catch (ClassNotFoundException | SQLException e) {
 				data = initTempData();
 				e.printStackTrace();
@@ -71,40 +69,39 @@ public class Data extends HttpServlet {
 		return Arrays.toString(listofData(data));
 	}
 
-	private String getDBdata(Timestamp timeConstraint, int id)
+	private String getDBdata(int id)
 			throws ClassNotFoundException, SQLException {
 		String data = "";
 
 		Connection conn = DataBaseInfo.getConnection();
 
 		data += "{'Temperature': ";
-		data += Arrays.toString(listofData(getTemperatureData(timeConstraint, conn, id)));
+		data += Arrays.toString(listofData(getTemperatureData(conn, id)));
 		data += ", ";
 
 		data += "'Light': ";
-		data += Arrays.toString(listofData(getLightData(timeConstraint, conn, id)));
+		data += Arrays.toString(listofData(getLightData(conn, id)));
 		data += ", ";
 
 		data += "'Humidity': ";
-		data += Arrays.toString(listofData(getHumidityData(timeConstraint, conn, id)));
+		data += Arrays.toString(listofData(getHumidityData(conn, id)));
 		data += ", ";
 
 		data += "'Soil Moisture': ";
-		data += Arrays.toString(listofData(getSoilMoistureData(timeConstraint, conn, id)));
+		data += Arrays.toString(listofData(getSoilMoistureData(conn, id)));
 		data += "}";
 		conn.close();
 
 		return data;
 	}
 
-	private ArrayList<GraphData> getLightData(Timestamp timeConstraint, Connection conn, int id)
+	private ArrayList<GraphData> getLightData(Connection conn, int id)
 			throws SQLException {
 		ArrayList<GraphData> data = new ArrayList<>();
 		PreparedStatement stmt = conn.prepareStatement(
 				"SELECT value, dateTime FROM Light INNER JOIN Sensors " + "ON Light.sensorID = Sensors.sensorID "
-						+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
-		stmt.setTimestamp(1, timeConstraint);
-		stmt.setInt(2, id);
+						+ "WHERE deviceID = ? ORDER BY dateTime ASC");
+		stmt.setInt(1, id);
 
 		if (stmt.execute()) {
 
@@ -117,14 +114,13 @@ public class Data extends HttpServlet {
 		return data;
 	}
 
-	private ArrayList<GraphData> getHumidityData(Timestamp timeConstraint, Connection conn, int id)
+	private ArrayList<GraphData> getHumidityData(Connection conn, int id)
 			throws SQLException {
 		ArrayList<GraphData> data = new ArrayList<>();
 		PreparedStatement stmt = conn.prepareStatement(
 				"SELECT value, dateTime FROM Humidity INNER JOIN Sensors " + "ON Humidity.sensorID = Sensors.sensorID "
-						+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
-		stmt.setTimestamp(1, timeConstraint);
-		stmt.setInt(2, id);
+						+ "WHERE deviceID = ? ORDER BY dateTime ASC");
+		stmt.setInt(1, id);
 
 		if (stmt.execute()) {
 
@@ -137,14 +133,13 @@ public class Data extends HttpServlet {
 		return data;
 	}
 
-	private ArrayList<GraphData> getSoilMoistureData(Timestamp timeConstraint, Connection conn, int id)
+	private ArrayList<GraphData> getSoilMoistureData(Connection conn, int id)
 			throws SQLException {
 		ArrayList<GraphData> data = new ArrayList<>();
 		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM SoilMoisture INNER JOIN Sensors "
 				+ "ON SoilMoisture.sensorID = Sensors.sensorID "
-				+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
-		stmt.setTimestamp(1, timeConstraint);
-		stmt.setInt(2, id);
+				+ "WHERE deviceID = ? ORDER BY dateTime ASC");
+		stmt.setInt(1, id);
 
 		if (stmt.execute()) {
 
@@ -157,14 +152,13 @@ public class Data extends HttpServlet {
 		return data;
 	}
 
-	private ArrayList<GraphData> getTemperatureData(Timestamp timeConstraint, Connection conn, int id)
+	private ArrayList<GraphData> getTemperatureData(Connection conn, int id)
 			throws SQLException {
 		ArrayList<GraphData> data = new ArrayList<>();
 		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Temperature INNER JOIN Sensors "
 				+ "ON Temperature.sensorID = Sensors.sensorID "
-				+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
-		stmt.setTimestamp(1, timeConstraint);
-		stmt.setInt(2, id);
+				+ "WHERE deviceID = ? ORDER BY dateTime ASC");
+		stmt.setInt(1, id);
 
 		if (stmt.execute()) {
 
