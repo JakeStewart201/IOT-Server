@@ -16,8 +16,9 @@ public class CreatePlants {
 		plantsList.add(new Plant("Cactus", 18, 30, 15, 25, 35, 50, 600, 900));
 		plantsList.add(new Plant("Carrot", 0, 10, 90, 100, 65, 75, 700, 800));
 		plantsList.add(new Plant("Marigold", 10, 25, 80, 100, 60, 80, 600, 900));
-		plantsList.add(new Plant("Venus Fly Trap", 15, 35, 50, 100, 60, 100, 600, 900));
+		plantsList.add(new Plant("Venus Fly Trap", 15, 35, 35, 100, 60, 100, 600, 900));
 		
+		//24, 40, 90, 681
 		
 		return plantsList;
 	}
