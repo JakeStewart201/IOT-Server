@@ -1,0 +1,30 @@
+<div id=nav-bar>
+
+  <div class="rectangle">
+
+  <ul id="navigation">
+    <li><a href="/index.html">Home</a></li>
+    <li><a href="/overview">Overview</a></li>
+    <li><a href="/add_plant">Notifications</a></li>
+    <li><a href="">Search</a></li>
+    <li><a href="/recommendations">Recommedations</a></li>
+    <li><a href="">Calendar</a></li>
+  </ul>
+
+  </div>
+
+  <script type="text/javascript">
+  $(function(){
+    var $page = $(location).attr('pathname');
+    $('ul#navigation li a').each(function(){
+      var $href = $(this).attr('href');
+      if (($href == $page)) {
+        $(this).addClass('active');
+      } else {
+        $(this).removeClass('active');
+      }
+    });
+  });
+  </script>
+
+</div>

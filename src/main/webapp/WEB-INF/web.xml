@@ -5,15 +5,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<servlet>
-    		<servlet-name>images</servlet-name>
-    		<servlet-class>com.example.images.ImageServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-    		<servlet-name>images</servlet-name>
-    		<url-pattern>/images/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>readings</servlet-name>
 		<servlet-class>com.json.Reading</servlet-class>
 	</servlet>
@@ -34,13 +25,21 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>test</servlet-name>
-		<servlet-class>com.test.test</servlet-class>
+		<servlet-name>add_plant</servlet-name>
+		<servlet-class>com.test.AddPlant</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
-		<servlet-name>test</servlet-name>
-		<url-pattern>/index.html</url-pattern>
+		<servlet-name>add_plant</servlet-name>
+		<url-pattern>/add_plant</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>overview</servlet-name>
+		<servlet-class>com.data.Overview</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>overview</servlet-name>
+		<url-pattern>/overview</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

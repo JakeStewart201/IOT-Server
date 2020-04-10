@@ -6,11 +6,9 @@ import java.util.*;
 public class RecommendPlant {
 
 	static Boolean running = true;
-	static LinkedList<Plant> plantsList = new LinkedList<Plant>();
+	static LinkedList<Plant> plantsList = CreatePlants.CreatePlantsList();
 	
 	public static void main(String[] args) {
-		
-		CreatePlants();
 		
 		Scanner in = new Scanner (System.in);
 		
@@ -30,7 +28,7 @@ public class RecommendPlant {
 			System.out.println("Enter light level");
 			double lightLevel = in.nextDouble();
 			
-			BestFitResult bestFit = SearchForBestPlant(plantsList, temperature, humidity, soilMoisture, lightLevel);
+			BestFitResult bestFit = SearchForBestPlant(temperature, humidity, soilMoisture, lightLevel);
 			
 			if (bestFit.getFound()) {
 				
@@ -45,13 +43,8 @@ public class RecommendPlant {
 			
 		}
 	}
-
-	static void CreatePlants() {
-		
-		plantsList = CreatePlants.CreatePlantsList();
-	}
 	
-	static BestFitResult SearchForBestPlant(LinkedList<Plant> plantsList, double temperature, double humidity, double soilMoisture, double lightLevel) {
+	public static BestFitResult SearchForBestPlant(double temperature, double humidity, double soilMoisture, double lightLevel) {
 		
 		LinkedList<SearchResult> resultsList = new LinkedList<SearchResult>();
 		final double tempRange = 50;

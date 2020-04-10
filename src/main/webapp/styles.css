@@ -1,0 +1,176 @@
+body {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.center {
+  margin: auto;
+  width: 90%;
+}
+
+.bar {
+  text-align: center;
+}
+
+#navigation {
+  padding-left: 0px;
+}
+
+#navigation li {
+  list-style: none;
+  display: block;
+  float: left;
+}
+
+#navigation li a {
+  display: block;
+  text-decoration: none;
+  color: #f0f0f0;
+  font-size: 1.6em;
+  margin 0 .5em;
+  float: left;
+  width: auto;
+  border: none;
+  padding: 10px 15px 9px 15px !important;
+  vertical-align: middle;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  background: #6b6b6b;
+}
+
+#navigation li a:hover {
+  background: #404040;
+}
+
+#navigation li a.active {
+  background: #27ff0f;
+  text: black;
+}
+
+.notification {
+  list-style: none;
+  padding: 0 0 0 0;
+}
+
+.notification li {
+  background: #c2c2c2;
+  position: relative;
+  margin: 1em 3em;
+  padding: 1em 1.5em 1em 1.5em !important;
+  border-radius: 0.2em;
+  font-size: 1.2em;
+}
+
+.rectangle {
+  height: calc(1.9em + 20px);
+  position: relative;
+  margin: 2em 2em;
+  background: #6b6b6b;
+  box-shadow: 0 4px 2px -2px #27ff0f;
+}
+
+.input-section {
+  text-align: right;
+  margin: 3em 3em;
+}
+
+.info-box {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  padding: 0;
+  overflow: visible;
+  margin: 0;
+}
+
+.plant-info {
+  background: #c2c2c2;
+  position: relative;
+  margin: 1em 1em;
+  padding: 1.5em 1.5em 1em 1.5em !important;
+  border-radius: 0.2em;
+  font-size: 1.2em;
+  list-style: none;
+  float: left;
+  overflow: visible;
+  text-decoration: none;
+  display: inline;
+}
+
+.plant-info:hover {
+	cursor:pointer;
+}
+
+.image-box {
+  background: #ffffff;
+  height: 320px;
+  width: 240px;
+  overflow: hidden;
+  margin: 0px 0px 15px 0px;
+}
+
+.image-box img {
+  max-height: 100%;
+}
+
+.status-box {
+  padding: 0;
+  overflow: visible;
+}
+
+.status-box ul {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.status {
+  float: left;
+  text-decoration: none;
+  margin: 0;
+  overflow: visible;
+  padding: 5.5px 5.5px 5.5px 5.5px;
+  height: 29px;
+  width: 29px;
+  border-radius: 3px;
+}
+
+.status img {
+  margin: 0;
+  height: 29px;
+  width: 29px;
+}
+
+.status .statustext {
+  visibility: hidden;
+  width: 140px;
+  font-size: 15px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  overflow: visible;
+  position: absolute;
+  margin: 18px 0px;
+  z-index: 1;
+}
+
+.status:hover .statustext {
+  visibility: visible;
+}
+
+.good {
+  background: #27ff0f;
+}
+
+.ok {
+  background: #f3f700;
+}
+
+.bad {
+  background: #f71000;
+}

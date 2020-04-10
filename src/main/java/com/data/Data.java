@@ -30,89 +30,79 @@ public class Data extends HttpServlet {
 		// response.setContentType("text/html;charset=UTF-8");
 		// PrintWriter out = response.getWriter();
 
-		String type = request.getParameter("type");
-		System.out.println("Parameter [type] value = " + type);
-
-		String fromDate = request.getParameter("fromDate");
-		System.out.println("Parameter [fromDate] value = " + fromDate);
-
-		
 		int id = 0;
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			id = 0;
 		}
 		System.out.println("Parameter [id] value = " + id);
 
-		if (type != null) {
+		if (id != 0) {
 			LocalDate dateConstraint;
 
 			dateConstraint = LocalDate.MIN;
 
-			if (!fromDate.equals("")) {
-				dateConstraint = LocalDate.parse(fromDate);
-			}
-
-			List<GraphData> data = new ArrayList<>();
+			String data = "";
 			try {
-				data = getDBdata(type, Timestamp.valueOf(dateConstraint.atStartOfDay()), id);
+				data = getDBdata(Timestamp.valueOf(dateConstraint.atStartOfDay()), id);
 			} catch (ClassNotFoundException | SQLException e) {
-				initTempData(data);
+				data = initTempData();
 				e.printStackTrace();
 			}
-
-			System.out.println("Date constraint: " + dateConstraint);
 
 			// getDBdata(type, dateConstraint);
 
 			// send data for graph to jsp
-			request.getSession().setAttribute("data", Arrays.toString(listofData(data)));
-			request.getSession().setAttribute("label", type);
+			request.getSession().setAttribute("data", data);
+			System.out.println(data);
 
 		}
 		request.getRequestDispatcher("/data_search.jsp").forward(request, response);
 	}
 
-	private void initTempData(List<GraphData> data) {
-
+	private String initTempData() {
+		ArrayList<GraphData> data = new ArrayList<>();
 		int year = 2020;
 		data.add(new GraphData(23, LocalDateTime.of(year, 01, 10, 6, 0)));
 		data.add(new GraphData(-5.6, LocalDateTime.of(year, 01, 20, 12, 0)));
 		data.add(new GraphData(17.5, LocalDateTime.of(year, 02, 15, 18, 0)));
 		data.add(new GraphData(10, LocalDateTime.of(year, 03, 7, 23, 0)));
+		return Arrays.toString(listofData(data));
 	}
 
-	private ArrayList<GraphData> getDBdata(String measurementType, Timestamp timeConstraint, int id)
+	private String getDBdata(Timestamp timeConstraint, int id)
 			throws ClassNotFoundException, SQLException {
-		ArrayList<GraphData> data = new ArrayList<GraphData>();
+		String data = "";
 
 		Connection conn = DataBaseInfo.getConnection();
 
-		switch (measurementType) {
-		case "Temperature":
-			getTemperatureData(timeConstraint, data, conn, id);
-			break;
-		case "Light":
-			getLightData(timeConstraint, data, conn, id);
-			break;
-		case "Humidity":
-			getHumidityData(timeConstraint, data, conn, id);
-			break;
-		case "Soil Moisture":
-			getSoilMoistureData(timeConstraint, data, conn, id);
-			break;
-		default:
-			initTempData(data);
-		}
+		data += "{'Temperature': ";
+		data += Arrays.toString(listofData(getTemperatureData(timeConstraint, conn, id)));
+		data += ", ";
+
+		data += "'Light': ";
+		data += Arrays.toString(listofData(getLightData(timeConstraint, conn, id)));
+		data += ", ";
+
+		data += "'Humidity': ";
+		data += Arrays.toString(listofData(getHumidityData(timeConstraint, conn, id)));
+		data += ", ";
+
+		data += "'Soil Moisture': ";
+		data += Arrays.toString(listofData(getSoilMoistureData(timeConstraint, conn, id)));
+		data += "}";
 		conn.close();
 
 		return data;
 	}
 
-	private void getLightData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
+	private ArrayList<GraphData> getLightData(Timestamp timeConstraint, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Light WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
+		ArrayList<GraphData> data = new ArrayList<>();
+		PreparedStatement stmt = conn.prepareStatement(
+				"SELECT value, dateTime FROM Light INNER JOIN Sensors " + "ON Light.sensorID = Sensors.sensorID "
+						+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
 		stmt.setInt(2, id);
 
@@ -124,11 +114,15 @@ public class Data extends HttpServlet {
 				data.add(new GraphData(rs.getInt("value"), rs.getTimestamp("dateTime").toLocalDateTime()));
 			}
 		}
+		return data;
 	}
 
-	private void getHumidityData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
+	private ArrayList<GraphData> getHumidityData(Timestamp timeConstraint, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Humidity WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
+		ArrayList<GraphData> data = new ArrayList<>();
+		PreparedStatement stmt = conn.prepareStatement(
+				"SELECT value, dateTime FROM Humidity INNER JOIN Sensors " + "ON Humidity.sensorID = Sensors.sensorID "
+						+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
 		stmt.setInt(2, id);
 
@@ -140,15 +134,18 @@ public class Data extends HttpServlet {
 				data.add(new GraphData(rs.getInt("value"), rs.getTimestamp("dateTime").toLocalDateTime()));
 			}
 		}
+		return data;
 	}
 
-	private void getSoilMoistureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
+	private ArrayList<GraphData> getSoilMoistureData(Timestamp timeConstraint, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn
-				.prepareStatement("SELECT value, dateTime FROM SoilMoisture WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
+		ArrayList<GraphData> data = new ArrayList<>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM SoilMoisture INNER JOIN Sensors "
+				+ "ON SoilMoisture.sensorID = Sensors.sensorID "
+				+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
 		stmt.setInt(2, id);
-		
+
 		if (stmt.execute()) {
 
 			ResultSet rs = stmt.getResultSet();
@@ -157,11 +154,15 @@ public class Data extends HttpServlet {
 				data.add(new GraphData(rs.getInt("value"), rs.getTimestamp("dateTime").toLocalDateTime()));
 			}
 		}
+		return data;
 	}
 
-	private void getTemperatureData(Timestamp timeConstraint, ArrayList<GraphData> data, Connection conn, int id)
+	private ArrayList<GraphData> getTemperatureData(Timestamp timeConstraint, Connection conn, int id)
 			throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Temperature WHERE dateTime > ? AND sensorID = ? ORDER BY dateTime ASC");
+		ArrayList<GraphData> data = new ArrayList<>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT value, dateTime FROM Temperature INNER JOIN Sensors "
+				+ "ON Temperature.sensorID = Sensors.sensorID "
+				+ "WHERE dateTime > ? AND deviceID = ? ORDER BY dateTime ASC");
 		stmt.setTimestamp(1, timeConstraint);
 		stmt.setInt(2, id);
 
@@ -173,6 +174,7 @@ public class Data extends HttpServlet {
 				data.add(new GraphData(rs.getInt("value"), rs.getTimestamp("dateTime").toLocalDateTime()));
 			}
 		}
+		return data;
 	}
 
 	private String[] listofData(List<GraphData> data) {
@@ -180,7 +182,7 @@ public class Data extends HttpServlet {
 		int i = 0;
 		System.err.println("Running");
 		for (GraphData d : data) {
-			arr[i] = "{\nx: " + d.getDateAsString() + ",\ny: " +  Double.toString(d.getMeasurement()) + "\n}";
+			arr[i] = "{\nx: " + d.getDateAsString() + ",\ny: " + Double.toString(d.getMeasurement()) + "\n}";
 			i += 1;
 		}
 		return arr;

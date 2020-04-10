@@ -37,7 +37,7 @@ public class Reading extends HttpServlet {
 		case "H":
 			addHumidityReading(conn, time, sensorID, value);
 			break;
-		case "M":
+		case "S":
 			addSoilMoistureReading(conn, time, sensorID, value);
 			break;
 		case "T":
